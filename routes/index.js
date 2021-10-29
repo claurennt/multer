@@ -1,19 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const multer = require("multer");
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./public/images");
-  },
-  filename: (req, file, cb) => {
-    const extension = file.mimetype.split("/")[1];
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, `${file.fieldname}-${uniqueSuffix}.${extension}`);
-  },
-});
-
-const upload = multer({ storage: storage });
+const upload = require("../utils/uploadLogic");
 
 /* GET home page. */
 router.get("/", (req, res, next) => {
@@ -21,14 +8,34 @@ router.get("/", (req, res, next) => {
 });
 
 router.post("/upload-profile-pic", upload.single("profile_pic"), (req, res) => {
-  if (!req.file) {
+  const { file } = req;
+  if (!file) {
+    return res.status(404).send("No file received");
+  }
+  const { filename } = file;
+  return res
+    .status(200)
+    .send(
+      `<h2>Here is the picture:</h2><br/><img src="/images/${filename}" alt="profile pic"/>`
+    );
+});
+
+router.post("/upload-cat-pics", upload.array("cat_pics"), (req, res) => {
+  const { files } = req;
+
+  if (!files) {
     return res.status(404).send("No file received");
   }
 
-  res
-    .status(200)
-    .send(
-      `<h2>Here is the picture:</h2><br/><img src="/images/${req.file.filename}" alt="profile pic"/>`
-    );
+  let htmlResult = ``;
+  let index = 1;
+
+  files.forEach((file) => {
+    const { filename } = file;
+    htmlResult += `<p>#${index} of your cat picture uploads:</p><img src="/images/${filename}" />`;
+    index++;
+  });
+  return res.status(200).send(htmlResult);
 });
+
 module.exports = router;
