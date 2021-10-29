@@ -1,9 +1,11 @@
 {
-  "name": "multer",
+  "name": "multer-exercise",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "nodemon ./bin/www",
+    "devwin": "set DEBUG=multer-exercise:* & npm start",
+    "devmac": "DEBUG=multer-exercise:* npm start"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -11,6 +13,8 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "multer": "^1.4.3",
+    "nodemon": "^2.0.14"
   }
 }
