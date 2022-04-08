@@ -9,8 +9,9 @@ router.get("/", (req, res, next) => {
 
 router.post("/upload-profile-pic", upload.single("profile_pic"), (req, res) => {
   const { file } = req;
+
   if (!file) {
-    return res.status(404).send("No file received");
+    return res.status(400).send("No file received");
   }
   const { filename } = file;
   return res
@@ -23,8 +24,8 @@ router.post("/upload-profile-pic", upload.single("profile_pic"), (req, res) => {
 router.post("/upload-cat-pics", upload.array("cat_pics"), (req, res) => {
   const { files } = req;
 
-  if (!files) {
-    return res.status(404).send("No file received");
+  if (!files.length) {
+    return res.status(400).send("No files received");
   }
 
   let htmlResult = ``;
