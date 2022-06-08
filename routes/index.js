@@ -14,6 +14,7 @@ router.post("/upload-profile-pic", upload.single("profile_pic"), (req, res) => {
     return res.status(400).send("No file received");
   }
   const { filename } = file;
+
   return res
     .status(200)
     .send(
